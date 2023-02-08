@@ -20,7 +20,7 @@ You need to properly format the uptime. Refer to the comments mentioned in forma
 System::System(){
     vector<int> Processes;
     Processes = LinuxParser::Pids();
-    for(int idx=0;idx<Processes.size();idx++)
+    for(unsigned int idx=0;idx<Processes.size();idx++)
     {
         processes_.push_back(Process(Processes[idx]));
     }

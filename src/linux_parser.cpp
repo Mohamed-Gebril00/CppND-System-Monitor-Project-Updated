@@ -78,7 +78,7 @@ vector<int> LinuxParser::Pids() {
 float LinuxParser::MemoryUtilization() { 
   float MemTotal, Memfree, MemUtili, value;
   string line, key;
-  std::ifstream stream(kProcDirectory + kVersionFilename);
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
   if (stream.is_open()) {
     for(int i=0;i<2;i++)
     {
@@ -90,7 +90,7 @@ float LinuxParser::MemoryUtilization() {
     }
   }
     MemUtili = MemTotal - Memfree;
-    return MemUtili; 
+    return (MemUtili/MemTotal); 
   }
 
 // TODO: Read and return the system uptime
@@ -211,7 +211,7 @@ float LinuxParser::CpuUtilization(int pid)
   string key;
   string uid;
   string pid_string=std::to_string(pid);
-  float value;
+  string value;
   vector<string> Stats;
   float Total_Time=0.0;
   float Seconds=0.0;
@@ -230,30 +230,30 @@ float LinuxParser::CpuUtilization(int pid)
       {
         case U_TIME_STAT:
             
-            stats.push_back(value);
+            stats.push_back(stof(value));
             break;
         case S_TIME_STAT:
             
-            stats.push_back(value);
+            stats.push_back(stof(value));
             break;
         case CU_TIME_STAT:
             
-            stats.push_back(value);
+            stats.push_back(stof(value));
             break;
         case CS_TIME_STAT:
             
-            stats.push_back(value);
+            stats.push_back(stof(value));
             break;
         case UP_TIME_STAT:
           
-            stats.push_back(value);
+            stats.push_back(stof(value));
             break;
       }
          
     }
   }
   Total_Time=stats[0]+stats[1]+stats[2]+stats[3];
-  Seconds = LinuxParser::UpTime() - stats[4]/sysconf(_SC_CLK_TCK);
+  Seconds = LinuxParser::UpTime() - (stats[4]/sysconf(_SC_CLK_TCK));
   CpuUsage=100*((Total_Time/sysconf(_SC_CLK_TCK))/Seconds);
   return CpuUsage;
 
@@ -348,17 +348,15 @@ long LinuxParser::UpTime(int pid) {
   vector<string> Stats;
  
   std::ifstream stream(kProcDirectory + pid_string + kStatFilename);
-  if (stream.is_open()) {
-    int i=0;
+  if (stream.is_open()) 
+  {
     std::getline(stream, line);
    
     std::istringstream linestream(line);
-for(int idx=0 ;idx<UP_TIME_STAT+1;idx++)
-{
-   linestream>>value;
-     
-      
-}
+    for(int idx=0 ;idx<UP_TIME_STAT+1;idx++)
+    {
+      linestream>>value;    
+    }
   }
 
   long up_time = std::stol(value)/sysconf(_SC_CLK_TCK);

@@ -37,6 +37,11 @@ string Process::User() { return User_; }
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { return UpTime_; }
 
+bool Process::operator< (Process const& a) const { 
+  Process& p1 = const_cast <Process&>(*this);
+  Process& p2 = const_cast <Process&>(a);
+  return p1.CpuUtilization() < p2.CpuUtilization();
+}
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 //bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }

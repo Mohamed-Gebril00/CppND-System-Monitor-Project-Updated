@@ -8,6 +8,7 @@ CMakeFiles/monitor.dir/src/linux_parser.cpp.o
  ../include/linux_parser.h
  /home/workspace/CppND-System-Monitor/src/linux_parser.cpp
 CMakeFiles/monitor.dir/src/main.cpp.o
+ ../include/format.h
  ../include/linux_parser.h
  ../include/ncurses_display.h
  ../include/process.h

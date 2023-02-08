@@ -8,7 +8,7 @@ float Processor::Utilization() {
     std::vector<std::string> Cpu_Stats;
     Cpu_Stats=LinuxParser::CpuUtilization();
     float user, nice, system, idle, iowait, irq, softirq, steal, guest, guest_nice;
-    float Cpu_Usage=0;
+    float Cpu_Usage=0, Total, Total_Idle, Total_diff, Idle_diff;
     user=std::stof(Cpu_Stats[0]);
     nice=std::stof(Cpu_Stats[1]);
     system=std::stof(Cpu_Stats[2]);
@@ -20,6 +20,11 @@ float Processor::Utilization() {
     guest=std::stof(Cpu_Stats[8]);
     guest_nice=std::stof(Cpu_Stats[9]);
 
-    Cpu_Usage=user+nice+system+idle+iowait+irq+softirq+steal+guest+guest_nice;
-    
+    Total=user+nice+system+idle+iowait+irq+softirq+steal+guest+guest_nice;
+    Total_Idle=iowait+idle;
+    Total_diff=Total-Prev_Total;
+    Idle_diff=Total_Idle-Prev_Idle;
+    Prev_Total=Total;
+    Prev_Idle=Total_Idle;
+    Cpu_Usage=(Total_diff-Idle_diff)/Total_diff;
     return Cpu_Usage; }
