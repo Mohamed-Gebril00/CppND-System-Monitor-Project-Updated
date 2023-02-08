@@ -254,7 +254,7 @@ float LinuxParser::CpuUtilization(int pid)
   }
   Total_Time=stats[0]+stats[1]+stats[2]+stats[3];
   Seconds = LinuxParser::UpTime() - (stats[4]/sysconf(_SC_CLK_TCK));
-  CpuUsage=100*((Total_Time/sysconf(_SC_CLK_TCK))/Seconds);
+  CpuUsage=((Total_Time/sysconf(_SC_CLK_TCK))/Seconds);
   return CpuUsage;
 
 }
@@ -359,7 +359,7 @@ long LinuxParser::UpTime(int pid) {
     }
   }
 
-  long up_time = std::stol(value)/sysconf(_SC_CLK_TCK);
+  long up_time = UpTime()-std::stol(value)/sysconf(_SC_CLK_TCK);
   return up_time;
   
   
